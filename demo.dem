@@ -1,0 +1,4 @@
+set terminal postscript
+set output "post.ps"
+splot "graph.graph"
+set output

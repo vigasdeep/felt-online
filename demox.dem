@@ -1,0 +1,4 @@
+set terminal postscript
+set output "postx.ps"
+splot "graph.graph" using 1:2:3 with lines
+set output
