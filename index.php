@@ -1,4 +1,5 @@
 <?php
+include('functions.php');
 exec('rm data.txt');
 exec('rm combined.txt');
 exec('rm *.graph');
@@ -12,7 +13,7 @@ error_reporting(E_ALL | E_STRICT);
 ini_set('display_errors', 1);
 
 #server setting
-$uploadfile = "/home/gagan/public_html/felt/";
+$uploadfile = "/home/bongo/public_html/felt/felt-online/";
 
 #home pc setting
 #$uploadfile = "/var/www/felt/"; 
@@ -20,8 +21,15 @@ $uploadfile = "/home/gagan/public_html/felt/";
 #work if file has been posted for upload
 if ($_SERVER['REQUEST_METHOD'] == 'POST') 
 	{
-
-		$stadfilename  = $_FILES['stadfilex']['name'];
+	$url = !empty($_POST['stadFileURL']) ? $_POST['stadFileURL'] : '' ;
+	if($url != '') {
+		
+		$stadfilename  = basename($url);
+		downloadFile($url,$uploadfile);
+	}
+	else{
+	      	$stadfilename  = $_FILES['stadfilex']['name']; 
+		
 		$type     = $_FILES['stadfilex']['type'];
 		$tmp_name = $_FILES['stadfilex']['tmp_name'];
 		$error    = $_FILES['stadfilex']['error'];
@@ -58,6 +66,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 				$response = 'Unknown error';
 				break;
 		}
+	}
 		exec('rm data.txt');
 		exec('rm combined.txt');
 		exec('rm *.png');
@@ -81,12 +90,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 
 #will work if data is not posted
 else {
-	echo
-		'<form action="nexgen.php" enctype="multipart/form-data" method="post">' .
-		'<center>' .
-		'<h1> FELT File Input </h1><br> <br /><input name="stadfilex" type="file" /><br />' .
-		'<input type="submit" value="Submit" />' .
-		'<center />' .
-		'</form>' .
-		'<a href = "https://hsrai.wordpress.com/2013/01/01/felt/" ><h2> Refrence documents </h2></a>';
+?>	
+		<form action="" enctype="multipart/form-data" method="post">
+		<center>
+		<h1> FELT File Input </h1><br> <br /><input name="stadfilex" type="file" /><br />
+			<h2> OR, upload by URL </h2> 
+		<input type="text" name="stadFileURL" size="80"/> <br />
+		<input type="submit" value="Submit" />
+		<center />
+		</form>
+		<a href = "https://hsrai.wordpress.com/2013/01/01/felt/" ><h2> Refrence documents </h2></a>
+<?php 
 }
+?>	
